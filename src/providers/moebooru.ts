@@ -17,8 +17,10 @@ export class MoebooruProvider extends BaseProvider {
 
   constructor(url: string) {
     super();
-    if (!URL.canParse(url)) {
-      throw new Error(`Invalid URL! URL Provided: ${url}`);
+    try {
+      new URL(url);
+    } catch {
+      throw new Error("Invalid URL!");
     }
     url = url.replace(/\/$/, "");
     this.baseURL = url;

@@ -1,0 +1,12 @@
+import { expect, test, describe } from "@jest/globals"
+import { provider } from "../setup";
+
+describe("Moebooru Tags", () => {
+  test("Can retrieve tags from Moebooru", async () => {
+    let tags = await provider.tags({
+      name: "yakumo_ran",
+    });
+    expect(tags[0]).toHaveProperty("id");
+    expect(tags[0]).toHaveProperty("name");
+  });
+})

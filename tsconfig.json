@@ -7,10 +7,11 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "./dist",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
-      "*": ["*", "*.ts", "*.tsx"]
+      "*": ["*", "*.ts", "*.tsx"],
+      "@/*": ["src/*"]
     }
   },
   "include": ["src/**/*.ts"],

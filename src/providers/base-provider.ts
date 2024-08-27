@@ -7,7 +7,8 @@ export abstract class BaseProvider {
   abstract search(query: string, ...args: any[]): Promise<unknown>;
 
   // Should take in an abstracted object (ie. MoebooruTagRequest) that can be converted to URL params for the provider
-  abstract tags?(args: any): Promise<unknown>;
+  // Promise<unknown> should eventually be refactored here into Promise<TagRes<MoebooruTagRes>> or similar
+  abstract tags(...args: any | any[]): Promise<unknown>;
 
   get toString(): ProviderStats {
     return {
