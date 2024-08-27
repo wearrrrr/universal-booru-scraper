@@ -1,7 +1,8 @@
 import { BaseProvider } from "./base-provider";
 import { handleResponse } from "./response-handler";
+import type { Moebooru } from "src/types/moebooru";
 
-const DEFAULT_SEARCH_OPTS: MoebooruSearchOpt = {
+const DEFAULT_SEARCH_OPTS: Moebooru.SearchOpt = {
   page: 1,
   limit: 100,
   // By default, all content is included, any other content is *opt out*.
@@ -23,36 +24,49 @@ export class MoebooruProvider extends BaseProvider {
     this.baseURL = url;
   }
 
-  override async search(query: string, opts?: Partial<MoebooruSearchOpt>): Promise<any> {
+  override async search(query: string, opts: Partial<Moebooru.SearchOpt>): Promise<Moebooru.SearchRes> {
       opts = { ...DEFAULT_SEARCH_OPTS, ...opts };
       if (!query) throw new Error("Query is required");
       if (opts.limit && opts.limit > 100) throw new Error("Limit must be less than 100");
       const url = `${this.baseURL}/post.json?tags=${query}&limit=${opts.limit}&page=${opts.page}`;
       const searchFetch = await fetch(url);
       return handleResponse(searchFetch, url, async () => {
-        const searchJson = await searchFetch.json();
+        const searchJson = await searchFetch.json() as Moebooru.Post[];
         // Map search results to MoebooruPost type, remove explicit and questionable posts if disallowed by options
-        let removed = 0;
-        searchJson.map((post: MoebooruPost) => {
-  
+        let filtered = 0;
+        searchJson.map((post: Moebooru.Post) => {
+          let index = searchJson.indexOf(post);
           if (!opts.questionable && post.rating === "q") {
-            delete searchJson[searchJson.indexOf(post)];
-            removed++;
+            delete searchJson[index];
+            filtered++;
           }
           if (!opts.explicit && post.rating === "e") {
-            delete searchJson[searchJson.indexOf(post)];
-            removed++;
+            delete searchJson[index];
+            filtered++;
           }
         });
         return {
           posts: searchJson,
-          removed: removed,
+          filtered: filtered,
         };
       })
   }
 
-  override async tags(...args: any[]): Promise<unknown> {
-    throw new Error("Method not implemented.");
+  tagRequestToUrlParams(tagRequest: Partial<Moebooru.TagRequest>): string {
+    let urlParams = Object.entries(tagRequest)
+    .filter(([_, value]) => value !== null && value !== '')
+    .map(([key, value]) => `&${key}=${value}`)
+    .join('');
+    return urlParams;
+  }
+
+  override async tags(args: Partial<Moebooru.TagRequest>): Promise<Moebooru.TagResponse[]> {
+    const url = `${this.baseURL}/tag.json?${this.tagRequestToUrlParams(args)}`;
+    const tagsFetch = await fetch(url);
+    return handleResponse(tagsFetch, url, async () => {
+      let json = await tagsFetch.json() as Moebooru.TagResponse[];
+      return json;
+    });
   }
 
 }
