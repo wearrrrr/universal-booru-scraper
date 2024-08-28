@@ -69,7 +69,7 @@ export class MoebooruProvider extends BaseProvider {
     });
   }
 
-  async tags_related(tag: string, type?: Moebooru.TagType): Promise<IBaseTagRes<Moebooru.RelatedTag>> {
+  async tags_related(tag: string, type?: Moebooru.TagType): Promise<IBaseRes<Moebooru.RelatedTag>> {
     let url = `${this.baseURL}/tag/related.json?tags=${tag}`;
     if (type) {
       url += `&type=${type}`;
