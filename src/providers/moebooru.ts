@@ -1,3 +1,4 @@
+import { LoginDetails, IBaseRes } from 'src/types/types';
 import { BaseProvider } from "./base-provider";
 import { handleResponse } from "./response-handler";
 import type { Moebooru } from "src/types/moebooru";
@@ -14,8 +15,9 @@ export class MoebooruProvider extends BaseProvider {
   readonly name = "Moebooru";
   readonly baseURL;
   readonly languages = ["en", "ja"];
+  loginDetails: LoginDetails = {};
 
-  constructor(url: string) {
+  constructor(url: string, login?: LoginDetails) {
     super();
     try {
       new URL(url);
@@ -24,6 +26,7 @@ export class MoebooruProvider extends BaseProvider {
     }
     url = url.replace(/\/$/, "");
     this.baseURL = url;
+    this.loginDetails = login || {};
   }
 
   override async search(query: string, opts: Partial<Moebooru.SearchOpt>): Promise<Moebooru.SearchRes> {
@@ -54,7 +57,38 @@ export class MoebooruProvider extends BaseProvider {
       })
   }
 
-  tagRequestToUrlParams(tagRequest: Partial<Moebooru.TagRequest>): string {
+  override async tags(args: Partial<Moebooru.TagRequest>): Promise<IBaseRes<Moebooru.TagResponse[]>> {
+    const url = `${this.baseURL}/tag.json?${this.objToURLParams(args)}`;
+    const tagsFetch = await fetch(url);
+    return handleResponse(tagsFetch, url, async () => {
+      const tagsJson = await tagsFetch.json() as Moebooru.TagResponse[];
+      return {
+        results: tagsJson,
+        totalResults: tagsJson.length,
+      };
+    });
+  }
+
+  async tags_related(tag: string, type?: Moebooru.TagType): Promise<IBaseTagRes<Moebooru.RelatedTag>> {
+    let url = `${this.baseURL}/tag/related.json?tags=${tag}`;
+    if (type) {
+      url += `&type=${type}`;
+    }
+    const relatedFetch = await fetch(url);
+    return handleResponse(relatedFetch, url, async () => {
+      const res = await relatedFetch.json() as Moebooru.RelatedTag[];
+      return {
+        results: res,
+        totalResults: res.length,
+      };
+    });
+  }
+
+  override async users(): Promise<boolean> {
+    throw new Error("Method not implemented.");
+  }
+
+  objToURLParams(tagRequest: Partial<Moebooru.TagRequest>): string {
     let urlParams = Object.entries(tagRequest)
     .filter(([_, value]) => value !== null && value !== '')
     .map(([key, value]) => `&${key}=${value}`)
@@ -62,13 +96,6 @@ export class MoebooruProvider extends BaseProvider {
     return urlParams;
   }
 
-  override async tags(args: Partial<Moebooru.TagRequest>): Promise<Moebooru.TagResponse[]> {
-    const url = `${this.baseURL}/tag.json?${this.tagRequestToUrlParams(args)}`;
-    const tagsFetch = await fetch(url);
-    return handleResponse(tagsFetch, url, async () => {
-      let json = await tagsFetch.json() as Moebooru.TagResponse[];
-      return json;
-    });
-  }
+
 
 }

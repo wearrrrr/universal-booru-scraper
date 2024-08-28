@@ -66,12 +66,12 @@ export namespace Moebooru {
     name: string,
     count: number,
     type: 0 | 1 | 3 | 4, 
+    ambiguous: boolean,
   };
+
+  export type RelatedTag = {
+    [key: string]: string[][],
+  }
+  export type TagType = "general" | "artist" | "copyright" | "character";
 }
 
-export enum MoebooruTagType {
-  general = 0,
-  artist = 1,
-  copyright = 3,
-  character = 4,
-}

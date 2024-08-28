@@ -6,7 +6,8 @@ describe("Moebooru Tags", () => {
     let tags = await provider.tags({
       name: "yakumo_ran",
     });
-    expect(tags[0]).toHaveProperty("id");
-    expect(tags[0]).toHaveProperty("name");
+    expect(tags.results[0]).toHaveProperty("id");
+    expect(tags.results[0]).toHaveProperty("name");
+    expect(tags.totalResults).toBeGreaterThan(0);
   });
 })

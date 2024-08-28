@@ -9,3 +9,10 @@ export interface ISearch<T> {
   totalResults?: number;
   results: T[];
 }
+
+export interface IBaseRes<T> {
+  results: T;
+  totalResults: number;
+}
+
+export type LoginDetails = Record<string, string>;
