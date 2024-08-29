@@ -1,4 +1,5 @@
 export namespace Moebooru {
+
   export type SearchOpt = {
     page: number,
     limit: number,
@@ -73,5 +74,16 @@ export namespace Moebooru {
     [key: string]: string[][],
   }
   export type TagType = "general" | "artist" | "copyright" | "character";
+
+  export type UserQuery = {
+    id: number,
+    name: string
+  }
+
+  export type UserResponse = {
+    name: string,
+    blacklisted_tags: string[],
+    id: string,
+  }
 }
 

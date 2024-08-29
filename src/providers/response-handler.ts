@@ -1,7 +1,7 @@
-export async function handleResponse(response: Response, url: string, successCallback: Function) {
+export async function handleResponse(response: Response, url: string, successCB: Function): Promise<any> {
   switch (response.status) {
     case 200:
-      return await successCallback();
+      return await successCB();
     case 403:
       throw new Error("403 Forbidden! Please check your URL and try again.");
     case 404:

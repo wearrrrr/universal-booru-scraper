@@ -1,13 +1,15 @@
-import { IBaseRes, LoginDetails } from "src/types/types";
+import type { IBaseRes, LoginDetails, Provider, ProviderStats } from "src/types/types";
 
-export abstract class BaseProvider {
+export abstract class BaseProvider implements Provider {
 
   abstract readonly name: string;
   abstract readonly baseURL: string;
-  protected readonly languages: string[] | string = "en";
+  readonly languages: string[] | string = "en";
   abstract loginDetails: LoginDetails;
 
-  abstract search(query: string, ...args: any[]): Promise<unknown>;
+  abstract login(loginDetails: Partial<LoginDetails>): void;
+
+  abstract search(query: string, ...args: any[]): Promise<IBaseRes<unknown>>;
 
   // Should take in an abstracted object (ie. MoebooruTagRequest) that can be converted to URL params for the provider
   // Promise<unknown> should eventually be refactored here into Promise<TagRes<MoebooruTagRes>> or similar

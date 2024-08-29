@@ -17,7 +17,7 @@ export class MoebooruProvider extends BaseProvider {
   readonly languages = ["en", "ja"];
   loginDetails: LoginDetails = {};
 
-  constructor(url: string, login?: LoginDetails) {
+  constructor(url: string, opts?: { login?: LoginDetails }) {
     super();
     try {
       new URL(url);
@@ -26,10 +26,16 @@ export class MoebooruProvider extends BaseProvider {
     }
     url = url.replace(/\/$/, "");
     this.baseURL = url;
-    this.loginDetails = login || {};
+    if (opts && opts.login) {
+      this.login(opts.login);
+    }
   }
 
-  override async search(query: string, opts: Partial<Moebooru.SearchOpt>): Promise<Moebooru.SearchRes> {
+  login(loginDetails: Partial<LoginDetails>): void {
+    this.loginDetails = loginDetails;
+  }
+
+  override async search(query: string, opts: Partial<Moebooru.SearchOpt>): Promise<IBaseRes<Moebooru.SearchRes>> {
       opts = { ...DEFAULT_SEARCH_OPTS, ...opts };
       if (!query) throw new Error("Query is required");
       if (opts.limit && opts.limit > 100) throw new Error("Limit must be less than 100");
@@ -51,8 +57,11 @@ export class MoebooruProvider extends BaseProvider {
           }
         });
         return {
-          posts: searchJson,
-          filtered: filtered,
+          results: {
+            posts: searchJson,
+            filtered: filtered,
+          },
+          totalResults: searchJson.length,
         };
       })
   }
@@ -84,8 +93,27 @@ export class MoebooruProvider extends BaseProvider {
     });
   }
 
-  override async users(): Promise<boolean> {
-    throw new Error("Method not implemented.");
+  override async users(args: Partial<Moebooru.UserQuery>): Promise<IBaseRes<Moebooru.UserResponse>> {
+    if (!this.loginDetails.username || !this.loginDetails.api_key) {
+      throw new Error("You must be logged in to perform this action! Call login(username, api_key) first.");
+    }
+
+    let url = `${this.baseURL}/user.json?login=${this.loginDetails.username}&password_hash=${this.loginDetails.api_key}`;
+    // else if is used here because id and name are mutually exclusive, you shouldn't search by name and id at the same time.
+    if (args.id) {
+      url += `&id=${args.id}`;
+    } else if (args.name) {
+      url += `&name=${args.name}`;
+    }
+
+    const userFetch = await fetch(url);
+    return handleResponse(userFetch, url, async () => {
+      const userJson = await userFetch.json() as Moebooru.UserResponse[];
+      return {
+        results: userJson,
+        totalResults: userJson.length,
+      };
+    });
   }
 
   objToURLParams(tagRequest: Partial<Moebooru.TagRequest>): string {
