@@ -77,7 +77,8 @@ export namespace Moebooru {
 
   export type UserQuery = {
     id: number,
-    name: string
+    name: string,
+    loginRequirement: boolean,
   }
 
   export type UserResponse = {

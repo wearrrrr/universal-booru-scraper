@@ -1,4 +1,4 @@
-import type { IBaseRes, LoginDetails, Provider, ProviderStats } from "src/types/types";
+import type { IBaseRes, LoginDetails, Provider, ProviderStats } from "src/types/";
 
 export abstract class BaseProvider implements Provider {
 

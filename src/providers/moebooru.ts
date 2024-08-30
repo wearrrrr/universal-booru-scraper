@@ -1,7 +1,8 @@
-import { LoginDetails, IBaseRes } from 'src/types/types';
+import type { LoginDetails, IBaseRes } from 'src/types/';
 import { BaseProvider } from "./base-provider";
 import { handleResponse } from "./response-handler";
 import type { Moebooru } from "src/types/moebooru";
+import { Language, Rating } from "src/enum/";
 
 const DEFAULT_SEARCH_OPTS: Moebooru.SearchOpt = {
   page: 1,
@@ -14,7 +15,7 @@ const DEFAULT_SEARCH_OPTS: Moebooru.SearchOpt = {
 export class MoebooruProvider extends BaseProvider {
   readonly name = "Moebooru";
   readonly baseURL;
-  readonly languages = ["en", "ja"];
+  readonly languages = [Language.English, Language.Japanese];
   loginDetails: LoginDetails = {};
 
   constructor(url: string, opts?: { login?: LoginDetails }) {
@@ -43,15 +44,15 @@ export class MoebooruProvider extends BaseProvider {
       const searchFetch = await fetch(url);
       return handleResponse(searchFetch, url, async () => {
         const searchJson = await searchFetch.json() as Moebooru.Post[];
-        // Map search results to MoebooruPost type, remove explicit and questionable posts if disallowed by options
+        // Map search results, remove explicit and questionable posts if disallowed by options
         let filtered = 0;
         searchJson.map((post: Moebooru.Post) => {
           let index = searchJson.indexOf(post);
-          if (!opts.questionable && post.rating === "q") {
+          if (!opts.questionable && post.rating === Rating.Questionable) {
             delete searchJson[index];
             filtered++;
           }
-          if (!opts.explicit && post.rating === "e") {
+          if (!opts.explicit && post.rating === Rating.Explicit) {
             delete searchJson[index];
             filtered++;
           }
@@ -93,11 +94,12 @@ export class MoebooruProvider extends BaseProvider {
     });
   }
 
-  override async users(args: Partial<Moebooru.UserQuery>): Promise<IBaseRes<Moebooru.UserResponse>> {
-    if (!this.loginDetails.username || !this.loginDetails.api_key) {
-      throw new Error("You must be logged in to perform this action! Call login(username, api_key) first.");
+  override async users(args: Partial<Moebooru.UserQuery>): Promise<IBaseRes<Moebooru.UserResponse[]>> {
+    if (args.loginRequirement != false) {
+      if (!(this.loginDetails.username) && !(this.loginDetails.api_key)) {
+        throw new Error("You must be logged in to perform this action! Call login(username, api_key) first.");
+      }
     }
-
     let url = `${this.baseURL}/user.json?login=${this.loginDetails.username}&password_hash=${this.loginDetails.api_key}`;
     // else if is used here because id and name are mutually exclusive, you shouldn't search by name and id at the same time.
     if (args.id) {

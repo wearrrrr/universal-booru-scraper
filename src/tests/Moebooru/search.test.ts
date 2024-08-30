@@ -6,9 +6,9 @@ describe("Moebooru Search", () => {
     let search = await provider.search("yakumo_ran", { 
       limit: 10
     });
-    expect(search).toHaveProperty("posts");
+    expect(search.results).toHaveProperty("posts");
     // If this passes then surely it's a valid post :clueless:
-    expect(search.posts[0]).toHaveProperty("id");
-    expect(search.posts.length).toBe(10);
+    expect(search.results.posts[0]).toHaveProperty("id");
+    expect(search.results.posts.length).toBe(10);
   });
 });
