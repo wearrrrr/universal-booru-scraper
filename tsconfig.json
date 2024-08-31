@@ -10,8 +10,9 @@
     "moduleResolution": "node",
     "baseUrl": "./",
     "paths": {
-      "*": ["*", "*.ts", "*.tsx"],
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@enum/*": ["src/enum/*"],
+      "@util/*": ["src/util/*"],
     }
   },
   "include": ["src/**/*.ts"],

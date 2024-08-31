@@ -1,6 +1,6 @@
 import providers from "./providers";
 
-const provider = new providers.Moebooru("https://konachan.net");
+const provider = new providers.Moebooru("https://konachan.net/");
 
 provider.login({
   username: "wearr",

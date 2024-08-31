@@ -1,4 +1,4 @@
-import type { IBaseRes, LoginDetails, Provider, ProviderStats } from "src/types/";
+import type { IBaseRes, LoginDetails, Provider, ProviderStats } from "@/types";
 
 export abstract class BaseProvider implements Provider {
 
@@ -6,6 +6,14 @@ export abstract class BaseProvider implements Provider {
   abstract readonly baseURL: string;
   readonly languages: string[] | string = "en";
   abstract loginDetails: LoginDetails;
+
+  constructor(url: string) {
+    try {
+      new URL(url);
+    } catch {
+      throw new Error("Invalid URL!");
+    }
+  }
 
   abstract login(loginDetails: Partial<LoginDetails>): void;
 

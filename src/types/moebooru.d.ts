@@ -1,5 +1,4 @@
 export namespace Moebooru {
-
   export type SearchOpt = {
     page: number,
     limit: number,

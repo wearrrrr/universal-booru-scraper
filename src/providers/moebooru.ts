@@ -1,8 +1,10 @@
-import type { LoginDetails, IBaseRes } from 'src/types/';
 import { BaseProvider } from "./base-provider";
-import { handleResponse } from "./response-handler";
-import type { Moebooru } from "src/types/moebooru";
-import { Language, Rating } from "src/enum/";
+import { handleResponse } from "@util/response-handler";
+import { Language } from '@enum/Language';
+import { Rating } from '@enum/Rating';
+import { IBaseRes, LoginDetails } from "@/types";
+import { Moebooru } from "@/types/moebooru";
+
 
 const DEFAULT_SEARCH_OPTS: Moebooru.SearchOpt = {
   page: 1,
@@ -18,13 +20,12 @@ export class MoebooruProvider extends BaseProvider {
   readonly languages = [Language.English, Language.Japanese];
   loginDetails: LoginDetails = {};
 
+  /**
+   * @param url The base URL of the moebooru site
+   * @param opts Options and extra details for the provider, generally optional for basic usage
+   */
   constructor(url: string, opts?: { login?: LoginDetails }) {
-    super();
-    try {
-      new URL(url);
-    } catch {
-      throw new Error("Invalid URL!");
-    }
+    super(url);
     url = url.replace(/\/$/, "");
     this.baseURL = url;
     if (opts && opts.login) {
@@ -32,10 +33,21 @@ export class MoebooruProvider extends BaseProvider {
     }
   }
 
+  /**
+   * Set the login details for the provider
+   * @param loginDetails The login details
+   * @returns void
+   */
   login(loginDetails: Partial<LoginDetails>): void {
     this.loginDetails = loginDetails;
   }
 
+  /**
+   * Search for posts on the loaded site.
+   * @param query The search query
+   * @param opts The search options
+   * @returns An object containing the search results and the total number of results.
+   */
   override async search(query: string, opts: Partial<Moebooru.SearchOpt>): Promise<IBaseRes<Moebooru.SearchRes>> {
       opts = { ...DEFAULT_SEARCH_OPTS, ...opts };
       if (!query) throw new Error("Query is required");
@@ -67,6 +79,11 @@ export class MoebooruProvider extends BaseProvider {
       })
   }
 
+  /**
+   * Get tags based args.name or args.id
+   * @param args Arguments to be sent to the API.
+   * @returns An object containing the tags and the total number of results.
+   */
   override async tags(args: Partial<Moebooru.TagRequest>): Promise<IBaseRes<Moebooru.TagResponse[]>> {
     const url = `${this.baseURL}/tag.json?${this.objToURLParams(args)}`;
     const tagsFetch = await fetch(url);
@@ -79,6 +96,12 @@ export class MoebooruProvider extends BaseProvider {
     });
   }
 
+  /**
+   * Get related tags based on the input
+   * @param tag The tag to find related tags for
+   * @param type The type of tag to find related tags for
+   * @returns An object containing related tags, and the total number of results.
+   */
   async tags_related(tag: string, type?: Moebooru.TagType): Promise<IBaseRes<Moebooru.RelatedTag>> {
     let url = `${this.baseURL}/tag/related.json?tags=${tag}`;
     if (type) {
@@ -94,9 +117,14 @@ export class MoebooruProvider extends BaseProvider {
     });
   }
 
+  /**
+   * Get user(s) based on args.name or args.id
+   * @param args Arguments to be sent to the API.
+   * @returns An object containing the user(s) and the total number of results.
+   */
   override async users(args: Partial<Moebooru.UserQuery>): Promise<IBaseRes<Moebooru.UserResponse[]>> {
     if (args.loginRequirement != false) {
-      if (!(this.loginDetails.username) && !(this.loginDetails.api_key)) {
+      if (!this.loginDetails.username && !this.loginDetails.api_key) {
         throw new Error("You must be logged in to perform this action! Call login(username, api_key) first.");
       }
     }
