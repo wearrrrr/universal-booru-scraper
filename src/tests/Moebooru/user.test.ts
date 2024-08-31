@@ -1,5 +1,5 @@
 import { expect, test, describe } from "@jest/globals"
-import { provider } from "../setup";
+import { provider } from "../moebooru_setup";
 
 describe("Moebooru User", () => {
   test("Can retrieve user from Moebooru", async () => {

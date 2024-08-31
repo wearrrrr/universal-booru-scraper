@@ -1,5 +1,5 @@
 import { expect, test, describe } from "@jest/globals"
-import { provider } from "../setup";
+import { provider } from "../moebooru_setup";
 
 describe("Moebooru Search", () => {
   test("Can search Moebooru and get proper results back", async () => {
@@ -9,6 +9,6 @@ describe("Moebooru Search", () => {
     expect(search.results).toHaveProperty("posts");
     // If this passes then surely it's a valid post :clueless:
     expect(search.results.posts[0]).toHaveProperty("id");
-    expect(search.results.posts.length).toBe(10);
+    expect(search.totalResults).toBe(10);
   });
 });

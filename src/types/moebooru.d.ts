@@ -70,7 +70,10 @@ export namespace Moebooru {
   };
 
   export type RelatedTag = {
-    [key: string]: string[][],
+    /*
+      yakumo_ran: TagResponse,
+    */
+    [key: string]: TagResponse[][],
   }
   export type TagType = "general" | "artist" | "copyright" | "character";
 

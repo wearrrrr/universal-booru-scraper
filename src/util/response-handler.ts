@@ -1,4 +1,6 @@
-export async function handleResponse(response: Response, url: string, successCB: Function): Promise<any> {
+import { IBaseRes } from "@/types";
+
+export async function handleResponse(response: Response, url: string, successCB: () => Promise<IBaseRes<any>>): Promise<IBaseRes<any>> {
   switch (response.status) {
     case 200:
       return await successCB();
@@ -14,5 +16,7 @@ export async function handleResponse(response: Response, url: string, successCB:
       throw new Error("500 Internal Server Error! Please try again later.");
     case 503:
       throw new Error("503 Service Unavailable! Please try again later.");
+    default:
+      throw new Error(`Unknown error occurred! Status: ${response.status}`);
   }
 }

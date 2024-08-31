@@ -4,6 +4,7 @@ import { Language } from '@enum/Language';
 import { Rating } from '@enum/Rating';
 import { IBaseRes, LoginDetails } from "@/types";
 import { Moebooru } from "@/types/moebooru";
+import { objToURLParams } from "@/util/obj-to-url-param";
 
 
 const DEFAULT_SEARCH_OPTS: Moebooru.SearchOpt = {
@@ -85,7 +86,7 @@ export class MoebooruProvider extends BaseProvider {
    * @returns An object containing the tags and the total number of results.
    */
   override async tags(args: Partial<Moebooru.TagRequest>): Promise<IBaseRes<Moebooru.TagResponse[]>> {
-    const url = `${this.baseURL}/tag.json?${this.objToURLParams(args)}`;
+    const url = `${this.baseURL}/tag.json?${objToURLParams(args)}`;
     const tagsFetch = await fetch(url);
     return handleResponse(tagsFetch, url, async () => {
       const tagsJson = await tagsFetch.json() as Moebooru.TagResponse[];
@@ -109,10 +110,10 @@ export class MoebooruProvider extends BaseProvider {
     }
     const relatedFetch = await fetch(url);
     return handleResponse(relatedFetch, url, async () => {
-      const res = await relatedFetch.json() as Moebooru.RelatedTag[];
+      const res = await relatedFetch.json();
       return {
         results: res,
-        totalResults: res.length,
+        totalResults: res[tag].length,
       };
     });
   }
@@ -144,14 +145,6 @@ export class MoebooruProvider extends BaseProvider {
         totalResults: userJson.length,
       };
     });
-  }
-
-  objToURLParams(tagRequest: Partial<Moebooru.TagRequest>): string {
-    let urlParams = Object.entries(tagRequest)
-    .filter(([_, value]) => value !== null && value !== '')
-    .map(([key, value]) => `&${key}=${value}`)
-    .join('');
-    return urlParams;
   }
 
 
