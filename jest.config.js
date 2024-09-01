@@ -2,7 +2,7 @@
 export default {
   testEnvironment: "node",
   transform: {
-    "^.+.tsx?$": ["ts-jest",{}],
+    "^.+.tsx?$": ["ts-jest", {}],
   },
   moduleNameMapper: {
     // @/*
@@ -11,5 +11,5 @@ export default {
     "^@util/(.*)$": "<rootDir>/src/util/$1",
     // @enum/*
     "^@enum/(.*)$": "<rootDir>/src/enum/$1",
-  }
+  },
 };

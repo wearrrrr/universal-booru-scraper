@@ -10,11 +10,10 @@ export interface Provider {
 }
 
 type ProviderStats = {
-  name: string,
-  baseURL: string,
-  languages: string[] | string,
+  name: string;
+  baseURL: string;
+  languages: string[] | string;
 };
-
 
 // https://github.com/consumet/consumet.ts/blob/c13c085583c31319e54c527da2dc3619eda7cd24/src/models/types.ts#L35
 export interface ISearch<T> {
@@ -37,4 +36,3 @@ export type LoginDetails = {
   username?: string;
   api_key?: string;
 };
-

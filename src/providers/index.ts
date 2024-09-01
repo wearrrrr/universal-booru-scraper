@@ -3,5 +3,5 @@ import { MoebooruProvider } from "./moebooru";
 
 export default {
   Moebooru: MoebooruProvider,
-  Gelbooru: GelbooruProvider
-}
+  Gelbooru: GelbooruProvider,
+};

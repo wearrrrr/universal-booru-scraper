@@ -1,4 +1,4 @@
-import { expect, test, describe } from "@jest/globals"
+import { expect, test, describe } from "@jest/globals";
 import { provider } from "../moebooru_setup";
 
 describe("Moebooru Related Tags", () => {
@@ -8,4 +8,4 @@ describe("Moebooru Related Tags", () => {
     expect(tags.results).toHaveProperty("yakumo_ran");
     expect(tags.totalResults).toBeGreaterThan(0);
   });
-})
+});

@@ -1,4 +1,4 @@
-import { expect, test, describe } from "@jest/globals"
+import { expect, test, describe } from "@jest/globals";
 import { provider } from "../moebooru_setup";
 
 describe("Moebooru Tags", () => {
@@ -10,4 +10,4 @@ describe("Moebooru Tags", () => {
     expect(tags.results[0]).toHaveProperty("name");
     expect(tags.totalResults).toBeGreaterThan(0);
   });
-})
+});

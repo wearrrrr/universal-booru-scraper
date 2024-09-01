@@ -1,7 +1,6 @@
 import type { IBaseRes, LoginDetails, Provider, ProviderStats } from "@/types";
 
 export abstract class BaseProvider implements Provider {
-
   abstract readonly name: string;
   abstract readonly baseURL: string;
   readonly languages: string[] | string = "en";

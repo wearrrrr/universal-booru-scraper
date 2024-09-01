@@ -12,7 +12,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@enum/*": ["src/enum/*"],
-      "@util/*": ["src/util/*"],
+      "@util/*": ["src/util/*"]
     }
   },
   "include": ["src/**/*.ts"],

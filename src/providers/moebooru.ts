@@ -1,11 +1,10 @@
 import { BaseProvider } from "./base-provider";
 import { handleResponse } from "@util/response-handler";
-import { Language } from '@enum/Language';
-import { Rating } from '@enum/Rating';
+import { Language } from "@enum/Language";
+import { Rating } from "@enum/Rating";
 import { IBaseRes, LoginDetails } from "@/types";
 import { Moebooru } from "@/types/moebooru";
 import { objToURLParams } from "@/util/obj-to-url-param";
-
 
 const DEFAULT_SEARCH_OPTS: Moebooru.SearchOpt = {
   page: 1,
@@ -13,7 +12,7 @@ const DEFAULT_SEARCH_OPTS: Moebooru.SearchOpt = {
   // By default, all content is included, any other content is *opt out*.
   questionable: true,
   explicit: true,
-}
+};
 
 export class MoebooruProvider extends BaseProvider {
   readonly name = "Moebooru";
@@ -50,34 +49,34 @@ export class MoebooruProvider extends BaseProvider {
    * @returns An object containing the search results and the total number of results.
    */
   override async search(query: string, opts: Partial<Moebooru.SearchOpt>): Promise<IBaseRes<Moebooru.SearchRes>> {
-      opts = { ...DEFAULT_SEARCH_OPTS, ...opts };
-      if (!query) throw new Error("Query is required");
-      if (opts.limit && opts.limit > 100) throw new Error("Limit must be less than 100");
-      const url = `${this.baseURL}/post.json?tags=${query}&limit=${opts.limit}&page=${opts.page}`;
-      const searchFetch = await fetch(url);
-      return handleResponse(searchFetch, url, async () => {
-        const searchJson = await searchFetch.json() as Moebooru.Post[];
-        // Map search results, remove explicit and questionable posts if disallowed by options
-        let filtered = 0;
-        searchJson.map((post: Moebooru.Post) => {
-          let index = searchJson.indexOf(post);
-          if (!opts.questionable && post.rating === Rating.Questionable) {
-            delete searchJson[index];
-            filtered++;
-          }
-          if (!opts.explicit && post.rating === Rating.Explicit) {
-            delete searchJson[index];
-            filtered++;
-          }
-        });
-        return {
-          results: {
-            posts: searchJson,
-            filtered: filtered,
-          },
-          totalResults: searchJson.length,
-        };
-      })
+    opts = { ...DEFAULT_SEARCH_OPTS, ...opts };
+    if (!query) throw new Error("Query is required");
+    if (opts.limit && opts.limit > 100) throw new Error("Limit must be less than 100");
+    const url = `${this.baseURL}/post.json?tags=${query}&limit=${opts.limit}&page=${opts.page}`;
+    const searchFetch = await fetch(url);
+    return handleResponse(searchFetch, url, async () => {
+      const searchJson = (await searchFetch.json()) as Moebooru.Post[];
+      // Map search results, remove explicit and questionable posts if disallowed by options
+      let filtered = 0;
+      searchJson.map((post: Moebooru.Post) => {
+        let index = searchJson.indexOf(post);
+        if (!opts.questionable && post.rating === Rating.Questionable) {
+          delete searchJson[index];
+          filtered++;
+        }
+        if (!opts.explicit && post.rating === Rating.Explicit) {
+          delete searchJson[index];
+          filtered++;
+        }
+      });
+      return {
+        results: {
+          posts: searchJson,
+          filtered: filtered,
+        },
+        totalResults: searchJson.length,
+      };
+    });
   }
 
   /**
@@ -89,7 +88,7 @@ export class MoebooruProvider extends BaseProvider {
     const url = `${this.baseURL}/tag.json?${objToURLParams(args)}`;
     const tagsFetch = await fetch(url);
     return handleResponse(tagsFetch, url, async () => {
-      const tagsJson = await tagsFetch.json() as Moebooru.TagResponse[];
+      const tagsJson = (await tagsFetch.json()) as Moebooru.TagResponse[];
       return {
         results: tagsJson,
         totalResults: tagsJson.length,
@@ -139,14 +138,11 @@ export class MoebooruProvider extends BaseProvider {
 
     const userFetch = await fetch(url);
     return handleResponse(userFetch, url, async () => {
-      const userJson = await userFetch.json() as Moebooru.UserResponse[];
+      const userJson = (await userFetch.json()) as Moebooru.UserResponse[];
       return {
         results: userJson,
         totalResults: userJson.length,
       };
     });
   }
-
-
-
 }

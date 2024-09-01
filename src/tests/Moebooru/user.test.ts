@@ -1,4 +1,4 @@
-import { expect, test, describe } from "@jest/globals"
+import { expect, test, describe } from "@jest/globals";
 import { provider } from "../moebooru_setup";
 
 describe("Moebooru User", () => {
@@ -13,4 +13,4 @@ describe("Moebooru User", () => {
     expect(user.results[0]).toHaveProperty("blacklisted_tags");
     expect(user.totalResults).toBeGreaterThan(0);
   });
-})
+});
