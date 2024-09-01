@@ -7,7 +7,6 @@ describe("Gelbooru Search", () => {
       limit: 10,
     });
     expect(search.results).toHaveProperty("post");
-    // If this passes then surely it's a valid post :clueless:
     expect(search.results.post[0]).toHaveProperty("id");
     expect(search.totalResults).toBe(10);
   });

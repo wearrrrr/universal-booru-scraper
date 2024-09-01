@@ -23,20 +23,33 @@ export class GelbooruProvider extends BaseProvider {
     throw new Error("Method not implemented.");
   }
 
-  override async search(query: string, args: Partial<Gelbooru.SearchOpt>): Promise<IBaseRes<any>> {
+  override async search(query: string, args: Partial<Gelbooru.SearchOpt>): Promise<IBaseRes<Gelbooru.SearchRes>> {
     let url = `${this.baseURL}/index.php?page=dapi&s=post&q=index&json=1&tags=${query}${objToURLParams(args)}`;
     const searchFetch = await fetch(url);
-    return handleResponse(searchFetch, url, async () => {
-      const searchJson = await searchFetch.json();
+    let searchJson = await searchFetch.json();
+    return handleResponse<Gelbooru.SearchRes>(searchFetch, url, () => {
+      // I hate having to do this, please gelbooru don't put @s in your json :sob:
+      searchJson["attributes"] = searchJson["@attributes"];
+      delete searchJson["@attributes"];
       return {
         results: searchJson,
         totalResults: searchJson.post.length,
       };
     });
   }
-  tags(args: any): Promise<IBaseRes<any>> {
-    throw new Error("Method not implemented.");
+
+  override async tags(args: Partial<Gelbooru.TagOpt>): Promise<IBaseRes<any>> {
+    let url = `${this.baseURL}/index.php?page=dapi&s=tag&q=index&json=1${objToURLParams(args)}`;
+    const tagFetch = await fetch(url);
+    return handleResponse(tagFetch, url, async () => {
+      const tagJson = await tagFetch.json();
+      return {
+        results: tagJson,
+        totalResults: tagJson.tag.length,
+      };
+    });
   }
+
   users(args: any): Promise<any> {
     throw new Error("Method not implemented.");
   }
