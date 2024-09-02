@@ -9,5 +9,6 @@ describe("Gelbooru Tags", () => {
     });
     expect(tags.results).toHaveProperty("tag");
     expect(tags.totalResults).toBeGreaterThan(0);
+    console.log(tags.results)
   });
 });

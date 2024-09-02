@@ -16,39 +16,53 @@ export namespace Gelbooru {
   };
 
   export type SearchRes = {
-    attributes: Attributes;
-    post: Post[];
+    // Use attributes instead, this exists to prevent type errors.
+    "@attributes"?: Attributes;
+    attributes?: Attributes;
+    post: Post0_2[] | Post0_3[];
   }
 
-  export interface Post {
+  // This is due to the fact that there are two *slightly* different versions of the post object.
+  export type Post = Post0_2 | Post0_3;
+
+  export interface PostBase {
     id: number;
-    created_at: string;
     score: number;
     width: number;
     height: number;
-    md5: string;
-    directory: string;
     image: string;
-    rating: string;
+    rating: "safe" | "questionable" | "explicit";
     source: string;
     change: number;
     owner: string;
     creator_id: number;
     parent_id: number;
-    sample: number;
-    preview_height: number;
-    preview_width: number;
     tags: string;
-    title: string;
     has_notes: string;
-    has_comments: string;
     file_url: string;
     preview_url: string;
     sample_url: string;
     sample_height: number;
     sample_width: number;
     status: string;
+  }
+
+  export interface Post0_2 extends PostBase {
+    hash: string;
+    sample: boolean;
+    directory: string;
+  }
+
+  export interface Post0_3 extends PostBase {
+    md5: string;
+    sample: number;
+    created_at: string;
+    directory: number;
+    preview_height: number;
+    preview_width: number;
+    title: string;
     post_locked: number;
+    has_comments: string;
     has_children: string;
   }
 
@@ -69,5 +83,18 @@ export namespace Gelbooru {
     count: number;
     type: number;
     ambiguous: number;
+  }
+
+  export interface TagList {
+    tag: TagRes[];
+  }
+
+  export interface XMLTagRes {
+    tags: {
+      children: {
+        tag: TagRes;
+      }[];
+      type: string;
+    }
   }
 }

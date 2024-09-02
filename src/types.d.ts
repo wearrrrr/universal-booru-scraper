@@ -30,6 +30,7 @@ export interface ISearch<T> {
 export interface IBaseRes<T> {
   results: T;
   totalResults: number;
+  wasXML?: boolean;
 }
 
 export type LoginDetails = {

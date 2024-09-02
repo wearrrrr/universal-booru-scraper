@@ -7,8 +7,10 @@
   "scripts": {
     "build": "node esbuild.config.js",
     "start": "node ./dist/index.js",
+    "format": "prettier --write .",
     "test": "jest ./src/tests/",
-    "format": "prettier --write ."
+    "test:moebooru": "jest ./src/tests/Moebooru/",
+    "test:gelbooru": "jest ./src/tests/Gelbooru/"
   },
   "keywords": [],
   "author": "",
@@ -21,5 +23,9 @@
     "prettier": "^3.3.3",
     "ts-jest": "^29.2.5",
     "typescript": "^5.5.4"
+  },
+  "dependencies": {
+    "fast-xml-parser": "^4.4.1",
+    "simple-xml-to-json": "^1.2.2"
   }
 }
