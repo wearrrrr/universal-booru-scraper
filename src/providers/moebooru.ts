@@ -108,7 +108,7 @@ export class MoebooruProvider extends BaseProvider {
     }
     const relatedFetch = await fetch(url);
     return handleResponse(relatedFetch, url, async () => {
-      const res = await relatedFetch.json();
+      const res = await relatedFetch.json() as Moebooru.RelatedTag;
       return {
         results: res,
         totalResults: res[tag].length,
@@ -145,7 +145,21 @@ export class MoebooruProvider extends BaseProvider {
     });
   }
 
-  comments(...args: any | any[]): Promise<IBaseRes<unknown>> {
-    throw new Error("Method not implemented.");
+  async comments(args: Partial<Moebooru.CommentOpt>): Promise<IBaseRes<Moebooru.Comment[]>> {
+    let url = `${this.baseURL}/comment.json?${objToURLParams(args)}`;
+    if (args.id) {
+      url = `${this.baseURL}/comment/show.json?id=${args.id}`;
+    }
+    const req = await fetch(url);
+
+    return handleResponse(req, req.url, async () => {
+      const json = await req.json();
+      // Fallback to 1 for length, because the only possible scenario this can happen in is when the comment ID is passed in
+      // Which returns a single comment, not an array of comments.
+      return {
+        results: json,
+        totalResults: json.length || 1,
+      };
+    });
   }
 }

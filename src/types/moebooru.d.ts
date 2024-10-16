@@ -70,10 +70,7 @@ export namespace Moebooru {
   };
 
   export type RelatedTag = {
-    /*
-      yakumo_ran: TagResponse,
-    */
-    [key: string]: TagResponse[][];
+    [key: string]: TagResponse[];
   };
   export type TagType = "general" | "artist" | "copyright" | "character";
 
@@ -88,4 +85,17 @@ export namespace Moebooru {
     blacklisted_tags: string[];
     id: string;
   };
+
+  type CommentOpt = {
+    post_id: string | number;
+    id: string | number;
+  }
+
+  type Comment = {
+    id: number;
+    created_at: string;
+    creator: string;
+    creator_id: number;
+    body: string;
+  }
 }

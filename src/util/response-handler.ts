@@ -3,17 +3,18 @@ export async function handleResponse<T>(response: Response, url: string, success
     case 200:
       return await successCB();
     case 400:
-      throw new Error(`400 Bad Request! Attempted URL: ${url}`);
+      throw new Error(`400 Bad Request! Attempted URL: ${response.url}`);
     case 403:
-      throw new Error(`403 Forbidden! Attempted URL: ${url}`);
+      throw new Error(`403 Forbidden! Attempted URL: ${response.url}`);
     case 404:
-      throw new Error(`404 Not Found! Attempted URL: ${url}`);
+      throw new Error(`404 Not Found! Attempted URL: ${response.url}`);
     case 410:
-      throw new Error(`410 Gone! This usually means you've hit the pagination limit. Attempted URL: ${url}`);
+      throw new Error(`410 Gone! This usually means you've hit the pagination limit. Attempted URL: ${response.url}`);
     case 421:
       throw new Error("You are being throttled by the server. Please try again later!");
     case 424:
-      throw new Error(`Invalid parameters! Query passed in: ${url}`);
+      let params = new URLSearchParams(response.url);
+      throw new Error(`Invalid parameters! Query passed in: ${params}`);
     case 500:
       throw new Error("500 Internal Server Error! Please try again later.");
     case 503:
