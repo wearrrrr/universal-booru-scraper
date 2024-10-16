@@ -2,7 +2,6 @@ import { BaseProvider } from "./base-provider";
 import { handleResponse } from "@util/response-handler";
 import { Language } from "@enum/Language";
 import { Rating } from "@enum/Rating";
-import { IBaseRes, LoginDetails } from "@/types";
 import { Moebooru } from "@/types/moebooru";
 import { objToURLParams } from "@/util/obj-to-url-param";
 
@@ -144,5 +143,9 @@ export class MoebooruProvider extends BaseProvider {
         totalResults: userJson.length,
       };
     });
+  }
+
+  comments(...args: any | any[]): Promise<IBaseRes<unknown>> {
+    throw new Error("Method not implemented.");
   }
 }

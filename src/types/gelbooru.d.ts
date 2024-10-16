@@ -86,15 +86,19 @@ export namespace Gelbooru {
   }
 
   export interface TagList {
-    tag: TagRes[];
+    tags: TagRes[];
   }
 
-  export interface XMLTagRes {
-    tags: {
-      children: {
-        tag: TagRes;
-      }[];
-      type: string;
-    }
+  interface Comment {
+    created_at: string;
+    post_id: string;
+    body: string;
+    creator: string;
+    id: string;
+    creator_id: string;
+  }
+
+  export interface CommentsRes {
+    comments: Comment[];
   }
 }

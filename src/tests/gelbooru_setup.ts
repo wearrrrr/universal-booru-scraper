@@ -5,5 +5,5 @@ import { GelbooruProvider } from "@/providers/gelbooru";
 export let provider: GelbooruProvider;
 
 beforeAll(() => {
-  provider = new providers.Gelbooru("https://gelbooru.com");
+  provider = new providers.Gelbooru("https://api.rule34.xxx");
 });

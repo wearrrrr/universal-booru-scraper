@@ -1,9 +1,8 @@
 import { Gelbooru } from "@/types/gelbooru";
 import { BaseProvider } from "./base-provider";
-import { IBaseRes, LoginDetails } from "@/types";
 import { objToURLParams } from "@/util/obj-to-url-param";
 import { handleResponse } from "@/util/response-handler";
-import { checkXML, parseXML } from "@/util/xml-handler";
+import { checkXML, parseXML, convertXMLDataToJSON } from "@/util/xml-handler";
 
 export class GelbooruProvider extends BaseProvider {
   readonly name = "Gelbooru";
@@ -48,13 +47,13 @@ export class GelbooruProvider extends BaseProvider {
     return handleResponse<Gelbooru.TagList>(tagFetch, url, async () => {
       let tagRes = await tagFetch.text();
       if (checkXML(tagRes)) {
-        let convertedXML = this.convertXMLTagResToTagRes(parseXML(tagRes) as Gelbooru.XMLTagRes);
+        let convertedXML = convertXMLDataToJSON(parseXML(tagRes));
         if (convertedXML) {
           return {
             results: {
-              tag: convertedXML.tag,
+              tags: convertedXML.tags,
             },
-            totalResults: convertedXML.tag.length,
+            totalResults: convertedXML.tags.length,
             wasXML: true,
           };
         }
@@ -62,9 +61,9 @@ export class GelbooruProvider extends BaseProvider {
       let tagJson = JSON.parse(tagRes) as Gelbooru.TagList;
       return {
         results: {
-          tag: tagJson.tag,
+          tags: tagJson.tags,
         },
-        totalResults: tagJson.tag.length,
+        totalResults: tagJson.tags.length,
       };
     });
   }
@@ -73,23 +72,26 @@ export class GelbooruProvider extends BaseProvider {
     throw new Error("Method not implemented.");
   }
 
-  convertXMLTagResToTagRes(xml: Gelbooru.XMLTagRes): Gelbooru.TagList {
-    console.log(xml)
-    const tags: Gelbooru.TagRes[] = [];
+  async comments(...args: any): Promise<IBaseRes<Gelbooru.CommentsRes>> {
+    const url = `${this.baseURL}/index.php?page=dapi&s=comment&q=index${objToURLParams(args)}`;
 
-    for (let tag of xml.tags.children) {
-      console.log(tag)
-      tags.push({
-        id: tag.tag.id,
-        name: tag.tag.name,
-        count: tag.tag.count,
-        type: tag.tag.type,
-        ambiguous: tag.tag.ambiguous,
-      });
+    const data = await fetch(url);
+
+    const text = await data.text();
+
+    if (checkXML(text)) {
+      const xml = convertXMLDataToJSON(parseXML(text)) as Gelbooru.CommentsRes;
+      return {
+        results: xml,
+        totalResults: xml.comments.length,
+        wasXML: true,
+      };
+    } else {
+      const json = JSON.parse(text);
+      return {
+        results: json,
+        totalResults: json.length,
+      };
     }
-
-    return {
-      tag: tags,
-    };
-  };
+  }
 }

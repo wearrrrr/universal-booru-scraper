@@ -1,5 +1,3 @@
-import { IBaseRes } from "@/types";
-
 export async function handleResponse<T>(response: Response, url: string, successCB: () => Promise<IBaseRes<T>> | IBaseRes<T>): Promise<IBaseRes<T>> {
   switch (response.status) {
     case 200:

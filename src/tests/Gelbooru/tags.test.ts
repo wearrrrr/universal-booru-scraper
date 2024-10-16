@@ -7,8 +7,14 @@ describe("Gelbooru Tags", () => {
       name: "yakumo_ran",
       limit: 10,
     });
-    expect(tags.results).toHaveProperty("tag");
+    const tag = tags.results.tags[0];
+    expect(tags.results).toHaveProperty("tags");
+    expect(tag).toHaveProperty("type");
+    expect(tag).toHaveProperty("count");
+    expect(tag).toHaveProperty("name");
+    expect(tag.name).toBe("yakumo_ran");
+    expect(tag).toHaveProperty("ambiguous");
+    expect(tag).toHaveProperty("id");
     expect(tags.totalResults).toBeGreaterThan(0);
-    console.log(tags.results)
   });
 });

@@ -1,4 +1,4 @@
-export interface Provider {
+interface Provider {
   name: string;
   baseURL: string;
   languages: string | string[];
@@ -16,7 +16,7 @@ type ProviderStats = {
 };
 
 // https://github.com/consumet/consumet.ts/blob/c13c085583c31319e54c527da2dc3619eda7cd24/src/models/types.ts#L35
-export interface ISearch<T> {
+interface ISearch<T> {
   currentPage?: number;
   hasNextPage?: boolean;
   totalPages?: number;
@@ -27,13 +27,17 @@ export interface ISearch<T> {
   results: T[];
 }
 
-export interface IBaseRes<T> {
+interface IBaseRes<T> {
   results: T;
   totalResults: number;
   wasXML?: boolean;
 }
 
-export type LoginDetails = {
+type LoginDetails = {
   username?: string;
   api_key?: string;
+};
+
+type XMLNode = {
+  [key: string]: string | XMLNode;
 };

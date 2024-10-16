@@ -1,5 +1,3 @@
-import type { IBaseRes, LoginDetails, Provider, ProviderStats } from "@/types";
-
 export abstract class BaseProvider implements Provider {
   abstract readonly name: string;
   abstract readonly baseURL: string;
@@ -24,6 +22,8 @@ export abstract class BaseProvider implements Provider {
 
   // Should take in an abstracted object (ie. MoebooruUserRequest) that can be converted to URL params for the provider
   abstract users(...args: any | any[]): Promise<unknown>;
+
+  abstract comments(...args: any | any[]): Promise<IBaseRes<unknown>>;
 
   get toString(): ProviderStats {
     return {
