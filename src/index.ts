@@ -1,6 +1,6 @@
 import providers from "./providers";
-import dotenv from "dotenv";
-dotenv.config();
+import "dotenv/config";
+
 
 const provider = new providers.Moebooru("https://konachan.net/");
 
@@ -9,7 +9,8 @@ provider.login({
   api_key: process.env.MOEBOORU_API_KEY,
 });
 
-const user = await provider.users({
+const user = await provider.user({
   id: 315784,
 });
-console.log(user.results);
+
+console.log(user.results, user.totalResults);

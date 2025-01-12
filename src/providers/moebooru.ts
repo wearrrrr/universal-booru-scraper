@@ -121,14 +121,14 @@ export class MoebooruProvider extends BaseProvider {
    * @param args Arguments to be sent to the API.
    * @returns An object containing the user(s) and the total number of results.
    */
-  override async users(args: Partial<Moebooru.UserQuery>): Promise<IBaseRes<Moebooru.UserResponse[]>> {
+  override async user(args: Partial<Moebooru.UserQuery>): Promise<IBaseRes<Moebooru.UserResponse[]>> {
     if (args.loginRequirement != false) {
       if (!this.loginDetails.username && !this.loginDetails.api_key) {
         throw new Error("You must be logged in to perform this action! Call login(username, api_key) first.");
       }
     }
     let url = `${this.baseURL}/user.json?login=${this.loginDetails.username}&password_hash=${this.loginDetails.api_key}`;
-    // else if is used here because id and name are mutually exclusive, you shouldn't search by name and id at the same time.
+    // id and name are mutually exclusive, you shouldn't search by name and id at the same time.
     if (args.id) {
       url += `&id=${args.id}`;
     } else if (args.name) {

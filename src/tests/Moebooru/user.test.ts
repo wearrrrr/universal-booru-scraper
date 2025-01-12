@@ -3,7 +3,7 @@ import { provider } from "../moebooru_setup";
 
 describe("Moebooru User", () => {
   test("Can retrieve user from Moebooru", async () => {
-    let user = await provider.users({
+    let user = await provider.user({
       name: "wearr",
       loginRequirement: false,
     });

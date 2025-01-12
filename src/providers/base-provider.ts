@@ -21,7 +21,7 @@ export abstract class BaseProvider implements Provider {
   abstract tags(...args: any | any[]): Promise<IBaseRes<unknown>>;
 
   // Should take in an abstracted object (ie. MoebooruUserRequest) that can be converted to URL params for the provider
-  abstract users(...args: any | any[]): Promise<unknown>;
+  abstract user(...args: any | any[]): Promise<unknown>;
 
   abstract comments(...args: any | any[]): Promise<IBaseRes<unknown>>;
 

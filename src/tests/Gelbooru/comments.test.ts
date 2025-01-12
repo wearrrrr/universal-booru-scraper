@@ -7,7 +7,8 @@ describe("Gelbooru Comments", () => {
       limit: 10,
     });
     const comment = search.results.comments[0];    
-    // @ts-ignore
+    console.log(comment);
+
     expect(search.results).toHaveProperty("comments");
     expect(comment).toHaveProperty("created_at");
     expect(comment).toHaveProperty("post_id");

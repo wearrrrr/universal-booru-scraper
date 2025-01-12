@@ -68,7 +68,7 @@ export class GelbooruProvider extends BaseProvider {
     });
   }
 
-  users(args: any): Promise<any> {
+  user(args: any): Promise<any> {
     throw new Error("Method not implemented.");
   }
 

@@ -1,4 +1,6 @@
-import { convertXML } from "simple-xml-to-json";
+import pkg from "simple-xml-to-json";
+
+const { convertXML } = pkg;
 
 export function parseXML(xml: string) {
   try {

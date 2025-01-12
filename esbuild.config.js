@@ -8,9 +8,10 @@ await esbuild
     entryPoints: ["src/index.ts"],
     bundle: true,
     platform: "node",
-    target: "es2022",
+    target: "ESNext",
     format: "esm",
     outdir: "dist",
+    packages: "external"
   })
   .catch(() => process.exit(1));
 let end = Date.now();
