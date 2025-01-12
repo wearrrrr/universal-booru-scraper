@@ -1,10 +1,12 @@
 import providers from "./providers";
+import dotenv from "dotenv";
+dotenv.config();
 
 const provider = new providers.Moebooru("https://konachan.net/");
 
 provider.login({
-  username: "wearr",
-  api_key: "i7RU56UMvEnK1r-fGjWWew",
+  username: process.env.MOEBOORU_USERNAME,
+  api_key: process.env.MOEBOORU_API_KEY,
 });
 
 const user = await provider.users({
