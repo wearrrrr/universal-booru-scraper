@@ -72,11 +72,9 @@ export class GelbooruProvider extends BaseProvider {
     throw new Error("Method not implemented.");
   }
 
-  async comments(...args: any): Promise<IBaseRes<Gelbooru.CommentsRes>> {
-    const url = `${this.baseURL}/index.php?page=dapi&s=comment&q=index${objToURLParams(args)}`;
-
+  async comments(id: string): Promise<IBaseRes<Gelbooru.CommentsRes>> {
+    const url = `${this.baseURL}/index.php?page=dapi&s=comment&q=index&post_id=${id}`;
     const data = await fetch(url);
-
     const text = await data.text();
 
     if (checkXML(text)) {

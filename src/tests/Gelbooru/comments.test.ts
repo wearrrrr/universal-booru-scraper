@@ -3,11 +3,8 @@ import { provider } from "../gelbooru_setup";
 
 describe("Gelbooru Comments", () => {
   test("Can fetch comments based on a post ID", async () => {
-    let search = await provider.comments("11073060", {
-      limit: 10,
-    });
-    const comment = search.results.comments[0];    
-    console.log(comment);
+    let search = await provider.comments("8037543");
+    const comment = search.results.comments[0];
 
     expect(search.results).toHaveProperty("comments");
     expect(comment).toHaveProperty("created_at");
