@@ -1,0 +1,44 @@
+{
+  "name": "booru-scraper",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "build": "node esbuild.config.js",
+    "start:danbooru": "node ./dist/danbooru_scraper.js",
+    "start:gelbooru": "node ./dist/gelbooru_scraper.js",
+    "start:yandere": "node ./dist/yandere_scraper.js",
+    "start:gelbooru-metadata": "node ./dist/generate_gelbooru_metadata.js",
+    "start:update-xmp-ratings": "node ./dist/update_xmp_rating_tags.js",
+    "format": "prettier --write .",
+    "test": "jest ./src/tests/",
+    "test:moebooru": "jest ./src/tests/Moebooru/",
+    "test:gelbooru": "jest ./src/tests/Gelbooru/",
+    "test:danbooru": "jest ./src/tests/Danbooru/"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@types/inquirer-autocomplete-prompt": "^3.0.3",
+    "@types/node": "^22.19.0",
+    "@types/prompt-sync": "^4.2.3",
+    "esbuild": "^0.23.1",
+    "jest": "^29.7.0",
+    "prettier": "^3.6.2",
+    "ts-jest": "^29.4.5",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "bottleneck": "^2.19.5",
+    "chalk": "^5.6.2",
+    "cheerio": "^1.1.2",
+    "dotenv": "^16.6.1",
+    "fast-xml-parser": "^4.5.3",
+    "inquirer": "^12.11.0",
+    "inquirer-autocomplete-standalone": "^0.8.1",
+    "simple-xml-to-json": "^1.2.3"
+  }
+}
