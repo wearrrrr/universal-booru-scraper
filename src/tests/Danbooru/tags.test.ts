@@ -3,8 +3,7 @@ import { provider } from "../danbooru_setup";
 
 describe("Danbooru Tags", () => {
   test("returns metadata for a specific tag", async () => {
-    const tags = await provider.tags({
-      name: "hololive",
+    const tags = await provider.tags("hololive", {
       limit: 1,
     });
 

@@ -8,8 +8,10 @@ export default {
     // @/*
     "^@/(.*)$": "<rootDir>/src/$1",
     // @util/*
-    "^@util/(.*)$": "<rootDir>/src/util/$1",
+    "^@util/(.*)$": "<rootDir>/src/lib/util/$1",
     // @enum/*
-    "^@enum/(.*)$": "<rootDir>/src/enum/$1",
+    "^@enum/(.*)$": "<rootDir>/src/lib/enum/$1",
+    // @lib/*
+    "^@lib/(.*)$": "<rootDir>/src/lib/$1",
   },
 };

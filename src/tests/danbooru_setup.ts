@@ -1,6 +1,6 @@
 import { beforeAll } from "@jest/globals";
-import providers from "@/providers";
-import { DanbooruProvider } from "@/providers/danbooru";
+import providers from "@lib/providers";
+import { DanbooruProvider } from "@lib/providers/danbooru";
 import "dotenv/config";
 
 export let provider: DanbooruProvider;

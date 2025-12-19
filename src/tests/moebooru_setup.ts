@@ -1,6 +1,6 @@
 import { beforeAll } from "@jest/globals";
-import providers from "@/providers";
-import { MoebooruProvider } from "@/providers/moebooru";
+import providers from "@lib/providers";
+import { MoebooruProvider } from "@lib/providers/moebooru";
 
 let provider: MoebooruProvider;
 beforeAll(() => {

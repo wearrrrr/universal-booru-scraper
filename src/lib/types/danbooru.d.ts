@@ -167,6 +167,7 @@ export namespace Danbooru {
 		id?: number | string;
 		name?: string;
 		category?: TagCategory;
+		limit?: number;
 		post_count?: number | string;
 		created_at?: Timestamp | string;
 		updated_at?: Timestamp | string;
